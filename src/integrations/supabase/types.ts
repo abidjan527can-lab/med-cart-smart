@@ -14,16 +14,431 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      customers: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      invoice_items: {
+        Row: {
+          batch_no: string | null
+          expiry_date: string | null
+          id: string
+          invoice_id: string
+          medicine_id: string | null
+          name: string
+          quantity: number
+          sale_price: number
+          unit_price: number
+        }
+        Insert: {
+          batch_no?: string | null
+          expiry_date?: string | null
+          id?: string
+          invoice_id: string
+          medicine_id?: string | null
+          name: string
+          quantity?: number
+          sale_price?: number
+          unit_price?: number
+        }
+        Update: {
+          batch_no?: string | null
+          expiry_date?: string | null
+          id?: string
+          invoice_id?: string
+          medicine_id?: string | null
+          name?: string
+          quantity?: number
+          sale_price?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoice_items_medicine_id_fkey"
+            columns: ["medicine_id"]
+            isOneToOne: false
+            referencedRelation: "medicines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          ai_raw: Json | null
+          created_at: string
+          created_by: string | null
+          id: string
+          image_url: string | null
+          invoice_date: string | null
+          invoice_no: string | null
+          status: Database["public"]["Enums"]["invoice_status"]
+          supplier_id: string | null
+          supplier_name: string | null
+          total: number
+        }
+        Insert: {
+          ai_raw?: Json | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          image_url?: string | null
+          invoice_date?: string | null
+          invoice_no?: string | null
+          status?: Database["public"]["Enums"]["invoice_status"]
+          supplier_id?: string | null
+          supplier_name?: string | null
+          total?: number
+        }
+        Update: {
+          ai_raw?: Json | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          image_url?: string | null
+          invoice_date?: string | null
+          invoice_no?: string | null
+          status?: Database["public"]["Enums"]["invoice_status"]
+          supplier_id?: string | null
+          supplier_name?: string | null
+          total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoices_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medicines: {
+        Row: {
+          barcode: string | null
+          batch_no: string | null
+          created_at: string
+          created_by: string | null
+          expiry_date: string | null
+          form: string | null
+          generic_name: string | null
+          id: string
+          image_url: string | null
+          manufacturer: string | null
+          min_stock: number
+          name: string
+          notes: string | null
+          pack_size: string | null
+          purchase_price: number
+          quantity: number
+          rack: string | null
+          sale_price: number
+          strength: string | null
+          unit: string
+          updated_at: string
+        }
+        Insert: {
+          barcode?: string | null
+          batch_no?: string | null
+          created_at?: string
+          created_by?: string | null
+          expiry_date?: string | null
+          form?: string | null
+          generic_name?: string | null
+          id?: string
+          image_url?: string | null
+          manufacturer?: string | null
+          min_stock?: number
+          name: string
+          notes?: string | null
+          pack_size?: string | null
+          purchase_price?: number
+          quantity?: number
+          rack?: string | null
+          sale_price?: number
+          strength?: string | null
+          unit?: string
+          updated_at?: string
+        }
+        Update: {
+          barcode?: string | null
+          batch_no?: string | null
+          created_at?: string
+          created_by?: string | null
+          expiry_date?: string | null
+          form?: string | null
+          generic_name?: string | null
+          id?: string
+          image_url?: string | null
+          manufacturer?: string | null
+          min_stock?: number
+          name?: string
+          notes?: string | null
+          pack_size?: string | null
+          purchase_price?: number
+          quantity?: number
+          rack?: string | null
+          sale_price?: number
+          strength?: string | null
+          unit?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      order_items: {
+        Row: {
+          id: string
+          medicine_id: string | null
+          name: string
+          order_id: string
+          quantity: number
+          unit_price: number
+        }
+        Insert: {
+          id?: string
+          medicine_id?: string | null
+          name: string
+          order_id: string
+          quantity?: number
+          unit_price?: number
+        }
+        Update: {
+          id?: string
+          medicine_id?: string | null
+          name?: string
+          order_id?: string
+          quantity?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_medicine_id_fkey"
+            columns: ["medicine_id"]
+            isOneToOne: false
+            referencedRelation: "medicines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          ai_raw: Json | null
+          created_at: string
+          created_by: string | null
+          customer_id: string | null
+          customer_name: string | null
+          customer_phone: string | null
+          id: string
+          note: string | null
+          order_no: number
+          prescription_url: string | null
+          status: Database["public"]["Enums"]["order_status"]
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          ai_raw?: Json | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          id?: string
+          note?: string | null
+          order_no?: number
+          prescription_url?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          ai_raw?: Json | null
+          created_at?: string
+          created_by?: string | null
+          customer_id?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          id?: string
+          note?: string | null
+          order_no?: number
+          prescription_url?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          total?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string
+          id: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      stock_movements: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          medicine_id: string
+          quantity: number
+          reason: string | null
+          reference_id: string | null
+          source: string
+          type: Database["public"]["Enums"]["movement_type"]
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          medicine_id: string
+          quantity: number
+          reason?: string | null
+          reference_id?: string | null
+          source?: string
+          type: Database["public"]["Enums"]["movement_type"]
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          medicine_id?: string
+          quantity?: number
+          reason?: string | null
+          reference_id?: string | null
+          source?: string
+          type?: Database["public"]["Enums"]["movement_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_movements_medicine_id_fkey"
+            columns: ["medicine_id"]
+            isOneToOne: false
+            referencedRelation: "medicines"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suppliers: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "staff"
+      invoice_status: "draft" | "posted"
+      movement_type: "in" | "out" | "adjust"
+      order_status:
+        | "pending"
+        | "confirmed"
+        | "ready"
+        | "delivered"
+        | "cancelled"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +565,11 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "staff"],
+      invoice_status: ["draft", "posted"],
+      movement_type: ["in", "out", "adjust"],
+      order_status: ["pending", "confirmed", "ready", "delivered", "cancelled"],
+    },
   },
 } as const
